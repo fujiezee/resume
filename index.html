@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人简历</title>
+  <style>
+    /* ---------- 基础 ---------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, "PingFang SC",
+        "Microsoft YaHei", sans-serif;   /* 无衬线优先 */
+      background-color: #f5f6f8;          /* 近白浅灰底色 */
+      color: #3a3f47;                     /* 深灰正文 */
+      max-width: 1200px;                  /* 桌面视口约束，避免横向滚动 */
+      min-width: 0;                       /* 允许子元素收缩 */
+      margin: 0 auto;
+      padding: 24px 24px 32px;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ---------- 顶部导航占位 ---------- */
+    .top-nav {
+      background-color: #ffffff;
+      border: 1px solid #e3e5e8;
+      border-radius: 6px;
+      padding: 14px 20px;
+      margin-bottom: 24px;                /* 导航与板块之间留白 */
+    }
+
+    .top-nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 24px;
+    }
+
+    .top-nav a {
+      color: #3a3f47;                     /* 正文链接深灰 */
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .top-nav a:hover {
+      color: #1f3a5f;                     /* 导航高亮用深蓝 */
+      text-decoration: underline;
+    }
+
+    /* ---------- 左右两栏布局：左窄右宽 ---------- */
+    .layout {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;                          /* 两栏间隙充足 */
+    }
+
+    .sidebar {
+      flex: 0 0 300px;                   /* 固定窄栏 */
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .main {
+      flex: 1 1 0%;                      /* 占满剩余宽度，即右宽栏 */
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* ---------- 板块占位 ---------- */
+    .section {
+      background-color: #ffffff;          /* 板块卡片近白 */
+      border: 1px solid #e3e5e8;
+      border-radius: 6px;
+      padding: 24px 24px;                 /* 板块内留白充足 */
+    }
+
+    /* 锚点目标：为未来 sticky 导航预留偏移（可选，本轮导航非固定，无实际遮挡） */
+    section[id] {
+      scroll-margin-top: 80px;
+    }
+
+    .section h2 {
+      font-size: 18px;
+      color: #1f3a5f;                     /* 深蓝，仅标题 */
+      border-left: 4px solid #1f3a5f;     /* 深蓝分隔线 */
+      padding-left: 10px;
+      margin-bottom: 16px;                /* 标题与内容间距协调 */
+    }
+
+    /* ---------- 圆形照片占位 ---------- */
+    .avatar {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background-color: #dce0e5;
+      color: #8a9199;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+    }
+
+    /* ---------- 基本信息（左栏） ---------- */
+    .basic-info {
+      list-style: none;
+    }
+
+    .basic-info li {
+      font-size: 14px;
+      color: #4c545e;                     /* 深灰系辅助文字 */
+      padding: 4px 0;
+      border-bottom: 1px dashed #eceef1;
+    }
+
+    .basic-info li:last-child {
+      border-bottom: none;
+    }
+
+    .basic-info .label {
+      display: inline-block;
+      min-width: 46px;
+      color: #3a3f47;                     /* 正文标签深灰，不用深蓝 */
+      font-weight: 600;
+    }
+
+    /* ---------- 技能列表（左栏） ---------- */
+    .skills-list {
+      list-style: disc;
+      padding-left: 1.4em;
+    }
+
+    .skills-list li {
+      font-size: 14px;
+      color: #4c545e;                     /* 深灰系辅助文字 */
+      padding: 4px 0;
+    }
+
+    /* ---------- 经历条目（右栏） ---------- */
+    .entry h3 {
+      font-size: 15px;
+      color: #1f3a5f;                     /* 深蓝，条目标题 */
+      margin-bottom: 2px;
+    }
+
+    .entry .period {
+      font-size: 13px;
+      color: #999;
+      margin-bottom: 6px;
+    }
+
+    .entry p,
+    .entry li {
+      font-size: 14px;
+      color: #4c545e;                     /* 深灰系辅助文字 */
+    }
+
+    .entry ul {
+      list-style: disc;
+      padding-left: 1.4em;
+    }
+
+    .entry li {
+      padding: 2px 0;
+    }
+
+    .entry + .entry {
+      border-top: 1px dashed #eceef1;     /* 浅色细分隔线 */
+      margin-top: 16px;
+      padding-top: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 顶部导航占位（锚点指向各板块，平滑跳转本轮不实现） -->
+  <nav class="top-nav">
+    <ul>
+      <li><a href="#basic-info">基本信息</a></li>
+      <li><a href="#skills">技能</a></li>
+      <li><a href="#education">教育背景</a></li>
+      <li><a href="#experience">工作或项目经历</a></li>
+    </ul>
+  </nav>
+
+  <!-- 左右两栏：左窄栏 + 右宽栏 -->
+  <div class="layout">
+
+    <!-- 左窄栏 -->
+    <aside class="sidebar">
+      <section class="section" id="basic-info">
+        <h2>基本信息</h2>
+        <div class="avatar">照片</div>
+        <ul class="basic-info">
+          <li><span class="label">姓名</span>张三</li>
+          <li><span class="label">电话</span>138-0000-0000</li>
+          <li><span class="label">邮箱</span>zhangsan@example.com</li>
+          <li><span class="label">现居地</span>示例市 · 示例区</li>
+        </ul>
+      </section>
+
+      <section class="section" id="skills">
+        <h2>技能</h2>
+        <ul class="skills-list">
+          <li>前端开发（HTML / CSS / JavaScript）</li>
+          <li>Vue / React 组件化开发</li>
+          <li>Node.js / REST API 联调</li>
+          <li>UI 设计（Figma 原型图）</li>
+          <li>Git 工作流 / 团队协作</li>
+        </ul>
+      </section>
+    </aside>
+
+    <!-- 右宽栏 -->
+    <main class="main">
+      <section class="section" id="education">
+        <h2>教育背景</h2>
+        <article class="entry">
+          <h3>示例大学 · 计算机科学与技术（本科）</h3>
+          <p class="period">2018.09 - 2022.06</p>
+          <p>主修数据结构、操作系统、数据库原理，GPA 3.5 / 4.0，获校级奖学金。</p>
+        </article>
+        <article class="entry">
+          <h3>示例理工学院 · 交换项目</h3>
+          <p class="period">2021.02 - 2021.08</p>
+          <p>参加示例交换项目，完成《Web 应用开发》课程并获得 A 等成绩。</p>
+        </article>
+      </section>
+
+      <section class="section" id="experience">
+        <h2>工作或项目经历</h2>
+        <article class="entry">
+          <h3>示例科技有限公司 · 前端工程师</h3>
+          <p class="period">2022.07 - 2025.06</p>
+          <ul>
+            <li>负责公司官网与后台管理系统的前端开发、维护及性能优化；</li>
+            <li>参与搭建内部组件库，页面平均加载时间降低约 30%；</li>
+            <li>与产品、后端协作完成 3 个大版本迭代并按时上线。</li>
+          </ul>
+        </article>
+        <article class="entry">
+          <h3>「示例」在线商城小程序 · 课程项目</h3>
+          <p class="period">2021.09 - 2022.05</p>
+          <ul>
+            <li>负责前端页面开发与接口联调，完成商品、购物车、订单等核心模块；</li>
+            <li>编写项目说明文档并做课堂演示，获评优秀课程项目（示例）。</li>
+          </ul>
+        </article>
+      </section>
+    </main>
+
+  </div>
+
+</body>
+</html>
